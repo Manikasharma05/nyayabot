@@ -1,43 +1,48 @@
-   /xampp/
-   *.log
-   *.tmp
-   *.bak
-   htdocs/ # Prevent accidental inclusion of other XAMPP projects
+/xampp/
+*.log
+*.tmp
+*.bak
+htdocs/ # Prevent accidental inclusion of other XAMPP projects
 
-   # PHP-specific
-   /vendor/
-   .env
-   .env.*
-   *.ini.bak # Backup of php.ini or other config files
+# PHP-specific
+/vendor/
+.env
+.env.*
+*.ini.bak # Backup of php.ini or other config files
 
-   # MySQL-related
-   *.sql # SQL dumps or database backups
-   mysql/ # MySQL data directory
-   data/ # Common folder for database files in XAMPP
+# Exclude test files
+test.html
+test.php
+test_db.php
+test_openai.php
 
-   # Node.js/JavaScript (if using npm or frontend tools)
-   /node_modules/
-   package-lock.json
-   /dist/
-   build/
+# MySQL-related
+*.sql # SQL dumps or database backups
+mysql/ # MySQL data directory
+data/ # Common folder for database files in XAMPP
 
-   # Editor and IDE files
-   /.vscode/
-   /.idea/
-   *.sublime-project
-   *.sublime-workspace
+# Node.js/JavaScript (if using npm or frontend tools)
+/node_modules/
+package-lock.json
+/dist/
+build/
 
-   # OS and system files
-   .DS_Store
-   Thumbs.db
-   desktop.ini
+# Editor and IDE files
+/.vscode/
+/.idea/
+*.sublime-project
+*.sublime-workspace
 
-   # Cache and temporary files
-   *.cache
-   *.temp
-   /tmp/
-   /cache/
+# OS and system files
+.DS_Store
+Thumbs.db
+desktop.ini
 
-   # Project-specific exclusions (add any custom folders/files)
-   # Example: /config/database.php # If you have sensitive DB configs
-   
+# Cache and temporary files
+*.cache
+*.temp
+/tmp/
+/cache/
+
+# Project-specific exclusions (add any custom folders/files)
+# Example: /config/database.php # If you have sensitive DB configs
