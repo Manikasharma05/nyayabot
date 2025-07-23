@@ -1,0 +1,597 @@
+/* Modern Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.7;
+  color: #1a1a1a;
+  background-color: #f8fafc;
+  padding-top: 70px; /* Reserve space for fixed navbar */
+}
+
+/* Main Content */
+.main-content {
+  margin-top: 80px;
+  padding: 32px;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Header Section */
+.header {
+  text-align: center;
+  background: #ffffff;
+  padding: 3rem;
+  border-radius: 12px;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.5s ease-in;
+}
+
+.header h1 {
+  color: #1e3a8a;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.header p {
+  color: #4b5563;
+  font-size: 1.25rem;
+}
+
+/* Content Sections */
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.content-card {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.content-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.content-card h2 {
+  color: #1e3a8a;
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.download-btn {
+  background: #10b981;
+  color: #ffffff;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  width: 100%;
+  margin-top: 1.5rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.download-btn:hover {
+  background: #059669;
+  transform: translateY(-2px);
+}
+
+/* Grievance Registry */
+.grievance-section {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.grievance-select {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-bottom: 1.5rem;
+  background: #f8fafc;
+  transition: border-color 0.3s ease;
+}
+
+.grievance-select:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
+.grievance-input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  min-height: 120px;
+  resize: vertical;
+  background: #f8fafc;
+  transition: border-color 0.3s ease;
+}
+
+.grievance-input:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
+.submit-btn {
+  background: #ef4444;
+  color: #ffffff;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 1.5rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-btn:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+/* Guide Section */
+.guide-section {
+  background: #f1f5f9;
+  padding: 2.5rem;
+  border-radius: 12px;
+  margin-top: 2.5rem;
+  display: none;
+}
+
+.guide-section h3 {
+  color: #1e3a8a;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.guide-steps {
+  list-style: none;
+  counter-reset: step-counter;
+}
+
+.guide-steps li {
+  counter-increment: step-counter;
+  margin-bottom: 1.5rem;
+  padding-left: 2.5rem;
+  position: relative;
+  font-size: 1.1rem;
+}
+
+.guide-steps li::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #3b82f6;
+  color: #ffffff;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Login Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 2000;
+  visibility: hidden; /* Use visibility to avoid flicker */
+}
+
+.modal-content {
+  background: #ffffff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2.5rem;
+  border-radius: 12px;
+  max-width: 450px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  opacity: 0; /* Start hidden for animation */
+  animation: slideIn 0.3s ease forwards; /* Ensure animation starts from center */
+}
+
+.modal.show {
+  visibility: visible; /* Show modal when class is added */
+}
+
+.close {
+  color: #6b7280;
+  float: right;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close:hover {
+  color: #1a1a1a;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  background: #f8fafc;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
+.login-btn {
+  background: #3b82f6;
+  color: #ffffff;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.login-btn:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+/* Signup Button */
+#signupBtn {
+  background: #10b981;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#signupBtn:hover {
+  background: #059669;
+  transform: translateY(-2px);
+}
+
+/* Modal Toggle Link */
+#toggleFormText {
+  text-align: center;
+  margin-top: 1.25rem;
+}
+
+#toggleFormText a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+#toggleFormText a:hover {
+  text-decoration: underline;
+}
+
+/* Modal Title Enhancement */
+#modalTitle {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-title-icon {
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+/* Chatbot Styles */
+.chatbot-container {
+  position: fixed;
+  bottom: 90px;
+  right: 24px;
+  width: 380px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  display: none;
+  flex-direction: column;
+  z-index: 1000;
+  max-height: 550px;
+}
+
+.chatbot-header {
+  background: #1e3a8a;
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatbot-messages {
+  padding: 20px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.chatbot-input {
+  display: flex;
+  padding: 12px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.chatbot-input input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 15px;
+  background: #f8fafc;
+}
+
+.chatbot-input input:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
+.chatbot-input button {
+  margin-left: 12px;
+  background: #3b82f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.chatbot-input button:hover {
+  background: #2563eb;
+}
+
+.close-chatbot {
+  background: transparent;
+  color: #ffffff;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.chatbot-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #1e3a8a;
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.chatbot-toggle:hover {
+  transform: scale(1.1);
+}
+
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  color: #ef4444;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+/* Chatbot Messages */
+.message {
+  margin: 10px 0;
+  max-width: 85%;
+}
+
+.user-message {
+  margin-left: auto;
+  background: #3b82f6;
+  color: #ffffff;
+  border-radius: 16px 16px 0 16px;
+}
+
+.bot-message {
+  margin-right: auto;
+  background: #f1f5f9;
+  border-radius: 16px 16px 16px 0;
+}
+
+.message-content {
+  padding: 10px 14px;
+  font-size: 15px;
+}
+
+.typing .message-content::after {
+  content: "...";
+  animation: typing 1.5s infinite;
+}
+
+@keyframes typing {
+  0%,
+  20% {
+    content: ".";
+  }
+  40% {
+    content: "..";
+  }
+  60%,
+  100% {
+    content: "...";
+  }
+}
+
+.error {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* IPC section highlights */
+strong {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%); /* Start slightly above center */
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 16px;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-links {
+    gap: 12px;
+  }
+
+  .nav-links button {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .chatbot-container {
+    width: 90%;
+    bottom: 80px;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .nav-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .modal-content {
+    padding: 1.5rem;
+    max-width: 85%;
+    max-height: 85vh;
+  }
+}
+
+/* User Status */
+.user-status {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.hidden {
+  display: none;
+}
+
+footer {
+  flex-shrink: 0; /* Prevent footer from shrinking */
+  background-color: #1f2937; /* Matches bg-gray-800 */
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  width: 100%;
+}

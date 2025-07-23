@@ -1,0 +1,82 @@
+.faqs-container {
+    margin: 50px auto 20px;
+    padding: 2.5rem;
+    max-width: 800px;
+    width: 90%;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.faqs-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.faqs-container h1 {
+    color: #1e3a8a;
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.faq-item {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-item h3 {
+    color: #1e3a8a;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+.faq-item p {
+    color: #4b5563;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+    display: none;
+}
+
+.faq-item.active p {
+    display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .faqs-container {
+        padding: 1.5rem;
+        margin-top: 60px;
+    }
+
+    .faqs-container h1 {
+        font-size: 1.75rem;
+    }
+
+    .faq-item h3 {
+        font-size: 1.1rem;
+    }
+
+    .faq-item p {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .faqs-container {
+        width: 95%;
+    }
+}

@@ -1,0 +1,155 @@
+/* Template-specific styles aligned with style.css */
+.template-item {
+    margin-bottom: 2rem;
+    padding: 2.5rem;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.template-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.template-item h2 {
+    color: #1e3a8a;
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.template-item p {
+    color: #4b5563;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.template-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.template-form input {
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 200px;
+    background: #f8fafc;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.template-form input:focus {
+    border-color: #3b82f6;
+    outline: none;
+}
+
+.template-form .download-btn {
+    background: #10b981;
+    color: #ffffff;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.template-form .download-btn:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+.template-form .download-btn.disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.tooltip {
+    cursor: pointer;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: #1e3a8a;
+    color: #ffffff;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 50%;
+    margin-left: 8px;
+    font-size: 0.8em;
+    font-family: 'Inter', sans-serif;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #1e3a8a;
+    color: #fff;
+    text-align: center;
+    padding: 8px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.85em;
+    font-family: 'Inter', sans-serif;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.disclaimer {
+    margin-top: 2.5rem;
+    padding: 2.5rem;
+    background: #f8f8f8;
+    border-radius: 12px;
+    font-size: 0.85em;
+    color: #4b5563;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.disclaimer p {
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .template-item {
+        padding: 1.5rem;
+    }
+
+    .template-form input {
+        width: 100%;
+    }
+
+    .template-form .download-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .template-item h2 {
+        font-size: 1.5rem;
+    }
+
+    .template-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

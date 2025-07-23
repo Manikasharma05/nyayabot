@@ -1,0 +1,102 @@
+.calculator {
+    margin: 80px auto 20px; /* Increased top margin to clear fixed navbar */
+    padding: 2.5rem; /* Matches templates.css padding */
+    max-width: 500px;
+    width: 90%; /* Responsive fallback */
+    background: #ffffff; /* Matches templates.css */
+    border: 1px solid #ddd; /* Matches templates.css border */
+    border-radius: 12px; /* Matches templates.css */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Matches templates.css */
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Matches templates.css hover */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; /* Matches templates.css */
+}
+
+.calculator:hover {
+    transform: translateY(-5px); /* Matches templates.css hover effect */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12); /* Matches templates.css hover shadow */
+}
+
+.calculator h2 {
+    color: #1e3a8a; /* Matches templates.css headings */
+    font-size: 1.75rem; /* Matches templates.css h2 */
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1.5rem; /* Improved spacing */
+}
+
+.calculator label {
+    display: block;
+    color: #4b5563; /* Matches templates.css text */
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.calculator select {
+    width: 100%;
+    padding: 12px; /* Matches templates.css input padding */
+    margin: 8px 0 15px;
+    border: 1px solid #e2e8f0; /* Matches templates.css input border */
+    border-radius: 8px; /* Matches templates.css input */
+    font-size: 16px;
+    background: #f8fafc; /* Matches templates.css input background */
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.calculator select:focus {
+    border-color: #3b82f6; /* Matches templates.css focus */
+    outline: none;
+}
+
+.calculator button {
+    width: 100%;
+    padding: 14px 28px; /* Matches templates.css button */
+    margin-top: 1rem;
+    border: none;
+    border-radius: 8px; /* Matches templates.css button */
+    background: #10b981; /* Green from templates.css */
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.calculator button:hover {
+    background: #059669; /* Matches templates.css hover */
+    transform: translateY(-2px);
+}
+
+.result {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.error {
+    color: #d63031;
+    font-size: 0.9em;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .calculator {
+        padding: 1.5rem; /* Reduced padding for mobile */
+        margin-top: 60px; /* Adjusted for navbar on mobile */
+    }
+
+    .calculator h2 {
+        font-size: 1.5rem; /* Reduced for mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .calculator {
+        width: 95%; /* Fuller width on very small screens */
+    }
+}
