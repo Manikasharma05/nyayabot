@@ -6,7 +6,6 @@
 
    # PHP-specific
    /vendor/
-   composer.lock
    .env
    .env.*
    *.ini.bak # Backup of php.ini or other config files
@@ -41,3 +40,4 @@
 
    # Project-specific exclusions (add any custom folders/files)
    # Example: /config/database.php # If you have sensitive DB configs
+   
