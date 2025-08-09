@@ -92,9 +92,7 @@ $templates = [
             });
         });
 
-        // Placeholder functions (assume defined in script.js)
-        function closeLoginModal() {}
-        function toggleForm(formType) {}
+    
     </script>
       <footer class="bg-gray-800 text-white text-center p-4 mt-4">
   <p>&copy; 2025 NYAYABOT. All rights reserved.</p>
