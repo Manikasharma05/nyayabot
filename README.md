@@ -3,6 +3,10 @@
 ## Overview
 NYAYABOT is a full-stack legal aid web platform designed to empower victims of injustice with accessible guidance and resources for addressing grievances. This project bridges the gap for users unfamiliar with legal processes by providing intuitive tools to initiate appropriate legal actions.
 
+## Demo Video
+[![Nyayabot Demo Thumbnail](https://raw.githubusercontent.com/ManiKasharma05/nyayabot/main/nyayabot-thumbnail.png)](https://youtu.be/IHJ4sxnAN94)
+*Thumbnail shows a map pin highlighting Delhi High Court in the court locator feature.*
+
 ## Features
 - Responsive User Interface: Designed with HTML, CSS, JavaScript, and Tailwind CSS for seamless access across devices.
 - Premade Legal Templates: Includes templates for FIR, rent agreements, and wills to simplify legal documentation.
@@ -22,6 +26,11 @@ NYAYABOT is a full-stack legal aid web platform designed to empower victims of i
 - Expand legal templates to cover additional documents.
 - Optimize Google Maps integration for better performance.
 - Add user authentication and profile management.
+- **Migrate backend to Django**: Transition from PHP/MySQL to Django for improved scalability, security, and modern framework benefits, with a focus on integrating the existing MySQL database and updating the frontend accordingly.
+
+  ## Status
+- 70-80% functional with minor issues.
+- Backend: Currently PHP/MySQL, with a planned migration to Django in progress.
 
 ## Contributing
 This project is currently not open for contributions as it is under active development. Please check back later for updates on collaboration opportunities.
