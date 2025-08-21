@@ -1,10 +1,14 @@
+
 <?php
-// CORS Headers
-// header("Access-Control-Allow-Origin: *");
-// header("Content-Type: application/json; charset=UTF-8");
-// header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
-// header("Access-Control-Max-Age: 3600");
-// header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+define('DB_HOST', 'localhost');
+define('DB_PORT', '3307');
+define('DB_NAME', 'nyayabot_db');
+define('DB_USER', 'root');
+define('DB_PASS', 'root123');
+
+
+define('SITE_URL', 'http://nyayabot.com'); // your site URL
+define('DEBUG_MODE', true); // set to false in production
 
 // JWT Secret (for authentication)
 define("JWT_SECRET", "your_super_secret_key_here");
