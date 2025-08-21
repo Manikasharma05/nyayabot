@@ -1,6 +1,9 @@
 $(document).ready(function () {
-  // Initialize navbar state (removed navbar.html loading since navbar.php is included statically)
-  updateNavbar();
+  try {
+    updateNavbar();
+  } catch (e) {
+    console.log("Navbar initialization error:", e);
+  }
 });
 
 const translations = {
@@ -72,35 +75,120 @@ const translations = {
 let currentUser = null;
 let currentLanguage = "en";
 
-// Load user data from localStorage
+// Validate session with the server
+// function validateSession() {
+//   return fetch("/nyayabot/api/auth/login.php", {
+//     method: "GET",
+//     credentials: "include",
+//   })
+//     .then((response) => {
+//       if (!response.ok) {
+//         throw new Error("Session validation failed");
+//       }
+//       return response.json();
+//     })
+//     .then((data) => {
+//       if (data.status === "success" && data.user) {
+//         currentUser = { email: data.user.email, user_id: data.user.user_id };
+//         localStorage.setItem("nyayabotUser", JSON.stringify(currentUser));
+//         return true;
+//       } else {
+//         throw new Error("Invalid session");
+//       }
+//     })
+//     .catch((error) => {
+//       console.error("Session validation error:", error);
+//       currentUser = null;
+//       localStorage.removeItem("nyayabotUser");
+//       sessionStorage.clear();
+//       return false;
+//     });
+// }
+
+// Validate session with the server
+function validateSession() {
+  return fetch("/nyayabot/api/auth/login.php", {
+    method: "GET",
+    credentials: "include",
+  })
+    .then((response) => {
+      console.log("Validate session response status:", response.status);
+      if (!response.ok) {
+        throw new Error("Session validation failed");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Validate session response data:", data);
+      if (data.status === "success" && data.user) {
+        currentUser = { email: data.user.email, user_id: data.user.user_id };
+        localStorage.setItem("nyayabotUser", JSON.stringify(currentUser));
+        return true;
+      } else {
+        throw new Error("Invalid session");
+      }
+    })
+    .catch((error) => {
+      console.error("Session validation error:", error);
+      currentUser = null;
+      localStorage.removeItem("nyayabotUser");
+      sessionStorage.clear();
+      return false;
+    });
+}
+
+// Load user data and validate session
 function loadUserData() {
-  const userData = localStorage.getItem("nyayabotUser");
-  if (userData) {
-    currentUser = JSON.parse(userData);
+  try {
+    const userData = localStorage.getItem("nyayabotUser");
+    if (userData) {
+      currentUser = JSON.parse(userData);
+      return validateSession().then((isValid) => {
+        updateNavbar();
+        return isValid;
+      });
+    } else {
+      updateNavbar();
+      return Promise.resolve(false);
+    }
+  } catch (e) {
+    console.log("Error loading user data:", e);
+    currentUser = null;
+    localStorage.removeItem("nyayabotUser");
     updateNavbar();
+    return Promise.resolve(false);
   }
 }
 
 // Update navbar buttons based on login state
 function updateNavbar() {
-  const loginBtn = document.getElementById("loginBtn");
-  const signupBtn = document.getElementById("signupBtn");
-  const logoutBtn = document.getElementById("logoutBtn");
+  try {
+    const loginBtn = document.getElementById("loginBtn");
+    const signupBtn = document.getElementById("signupBtn");
+    // const logoutBtn = document.getElementById("logoutBtn");
+    const newLogout = document.getElementById("logout-btn");
 
-  if (currentUser) {
-    loginBtn.classList.add("hidden");
-    signupBtn.classList.add("hidden");
-    logoutBtn.classList.remove("hidden");
-  } else {
-    loginBtn.classList.remove("hidden");
-    signupBtn.classList.remove("hidden");
-    logoutBtn.classList.add("hidden");
+    const loggedIn = !!currentUser;
+
+    if (loginBtn) loginBtn.classList.toggle("hidden", loggedIn);
+    if (signupBtn) signupBtn.classList.toggle("hidden", loggedIn);
+    if (newLogout) newLogout.classList.toggle("hidden", !loggedIn);  
+  } catch (e) {
+    console.error("Navbar update error:", e);
+    const loginBtn = document.getElementById("loginBtn");
+    const signupBtn = document.getElementById("signupBtn");
+    // const logoutBtn = document.getElementById("logoutBtn");
+    const newLogout = document.getElementById("logout-btn");
+    if (loginBtn) loginBtn.classList.remove("hidden");
+    if (signupBtn) signupBtn.classList.remove("hidden");
+    // if (logoutBtn) logoutBtn.classList.add("hidden");
+    if (newLogout) newLogout.classList.add("hidden");
   }
 }
 
 // Modal functionality
 function openLoginModal(formType = "login") {
-  console.log("Opening modal for:", formType); // Debug log
+  console.log("Opening modal for:", formType);
   const modal = document.getElementById("loginModal");
   if (!modal) {
     console.error("Login modal not found in DOM");
@@ -111,12 +199,10 @@ function openLoginModal(formType = "login") {
   const toggleFormText = document.getElementById("toggleFormText");
   const t = translations[currentLanguage];
 
-  // Set modal title with icon and styling
   modalTitle.innerHTML = `<span class="modal-title-icon">${
     formType === "login" ? "🔐" : "📝"
   }</span> ${formType === "login" ? t.loginTitle : t.signupTitle}`;
 
-  // Create form HTML based on type
   let formHTML = "";
   if (formType === "login") {
     formHTML = `
@@ -129,7 +215,6 @@ function openLoginModal(formType = "login") {
         <input type="password" id="modalPassword" required />
       </div>`;
   } else {
-    // signup
     formHTML = `
       <div class="form-group">
         <label for="modalEmail">${t.emailLabel}</label>
@@ -162,18 +247,16 @@ function openLoginModal(formType = "login") {
 
   formContainer.innerHTML = formHTML;
 
-  // Set toggle text with event handlers
   toggleFormText.innerHTML =
     formType === "login"
       ? `${t.toggleSignupText} <a href="#" onclick="toggleForm('signup'); return false;">${t.signupBtnText}</a>`
       : `${t.toggleLoginText} <a href="#" onclick="toggleForm('login'); return false;">${t.loginBtnText}</a>`;
 
-  // Show modal with animation
   modal.classList.add("show");
 }
 
 function toggleForm(formType) {
-  console.log("Toggling to:", formType); // Debug log
+  console.log("Toggling to:", formType);
   closeLoginModal();
   openLoginModal(formType);
 }
@@ -191,33 +274,30 @@ function modalLogin() {
   const password = document.getElementById("modalPassword").value;
 
   if (email && password) {
-    console.log("Sending login request:", { email, password });
-    fetch("api/auth/login.php", {
+    console.log("Sending login request:", { email });
+    fetch("/nyayabot/api/auth/login.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email: email, password: password }),
+      credentials: "include",
     })
       .then((response) => {
         console.log("Login response status:", response.status);
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          return response.json().then((err) => {
+            throw new Error(
+              err.message || `HTTP error! Status: ${response.status}`
+            );
+          });
         }
-        return response.text(); // Use text() to get raw response
+        return response.json();
       })
-      .then((text) => {
-        console.log("Raw response text:", text);
-        let data;
-        try {
-          data = JSON.parse(text); // Attempt to parse as JSON
-        } catch (e) {
-          console.error("Failed to parse JSON:", e);
-          throw new Error("Invalid server response: " + text);
-        }
+      .then((data) => {
         console.log("Login response data:", data);
-        if (data.message === "Login successful") {
-          currentUser = { email: data.email, user_id: data.user_id };
+        if (data.status === "success" && data.data) {
+          currentUser = { email: data.data.email, user_id: data.data.user_id };
           localStorage.setItem("nyayabotUser", JSON.stringify(currentUser));
           updateNavbar();
           closeLoginModal();
@@ -228,7 +308,7 @@ function modalLogin() {
       })
       .catch((error) => {
         console.error("Login error:", error);
-        alert("Error logging in. Please try again. Check console for details.");
+        alert(error.message || "Error logging in. Please try again.");
       });
   } else {
     alert("Please enter both email and password");
@@ -236,42 +316,103 @@ function modalLogin() {
 }
 
 // Modal signup function
+// function modalSignup() {
+//   const email = document.getElementById("modalEmail").value;
+//   const password = document.getElementById("modalPassword").value;
+//   const confirmPassword = document.getElementById("modalConfirmPassword").value;
+//   const name = document.getElementById("modalFullName").value;
+//   const phone = document.getElementById("modalPhone").value;
+
+//   if (email && password && confirmPassword && name && phone) {
+//     if (password !== confirmPassword) {
+//       alert("Passwords do not match. Please try again.");
+//       return;
+//     }
+//     console.log("Sending signup request:", { email, name, phone });
+//     fetch("/nyayabot/api/auth/register.php", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         email: email,
+//         password: password,
+//         name: name,
+//         phone: phone,
+//       }),
+//       credentials: "include",
+//     })
+//       .then((response) => {
+//         console.log("Signup response status:", response.status);
+//         if (!response.ok) {
+//           return response.json().then((err) => {
+//             throw new Error(
+//               err.message || `HTTP error! Status: ${response.status}`
+//             );
+//           });
+//         }
+//         return response.json();
+//       })
+//       .then((data) => {
+//         console.log("Signup response data:", data);
+//         if (data.message === "User registered successfully") {
+//           currentUser = { email: email, name: name, user_id: data.user_id };
+//           localStorage.setItem("nyayabotUser", JSON.stringify(currentUser));
+//           updateNavbar();
+//           closeLoginModal();
+//           alert("Account created successfully!");
+//           alert(data.message || "Registration failed");
+//         }
+//       })
+//       .catch((error) => {
+//         console.error("Signup error:", error);
+//         alert(error.message || "Error registering. Please try again.");
+//       });
+//   } else {
+//     alert("Please fill all fields");
+//   }
+// }
+
 function modalSignup() {
   const email = document.getElementById("modalEmail").value;
   const password = document.getElementById("modalPassword").value;
   const confirmPassword = document.getElementById("modalConfirmPassword").value;
   const name = document.getElementById("modalFullName").value;
   const phone = document.getElementById("modalPhone").value;
-
+  console.log("Sending signup request:", { email, name, phone });
   if (email && password && confirmPassword && name && phone) {
     if (password !== confirmPassword) {
       alert("Passwords do not match. Please try again.");
       return;
     }
-    console.log("Sending signup request:", { email, password, name, phone });
-    fetch("api/auth/register.php", {
+    fetch("/nyayabot/api/auth/register.php", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-        name: name,
-        phone: phone,
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, name, phone }),
+      credentials: "include",
     })
       .then((response) => {
         console.log("Signup response status:", response.status);
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          return response.text().then((text) => {
+            console.error("Raw response:", text);
+            try {
+              return JSON.parse(text);
+            } catch (e) {
+              throw new Error(`Non-JSON response: ${text || "Empty response"}`);
+            }
+          });
         }
         return response.json();
       })
       .then((data) => {
         console.log("Signup response data:", data);
-        if (data.message === "User registered successfully") {
-          currentUser = { email: email, name: name };
+        if (data.status === "success" && data.data) {
+          currentUser = {
+            email: data.data.email,
+            user_id: data.data.user_id,
+            name,
+          };
           localStorage.setItem("nyayabotUser", JSON.stringify(currentUser));
           updateNavbar();
           closeLoginModal();
@@ -282,9 +423,7 @@ function modalSignup() {
       })
       .catch((error) => {
         console.error("Signup error:", error);
-        alert(
-          "Error registering. Please try again. Check console for details."
-        );
+        alert(error.message || "Error registering. Please try again.");
       });
   } else {
     alert("Please fill all fields");
@@ -292,10 +431,31 @@ function modalSignup() {
 }
 
 function logout() {
-  currentUser = null;
-  localStorage.removeItem("nyayabotUser");
-  updateNavbar();
-  alert("Logged out successfully!");
+  fetch("/nyayabot/api/auth/logout.php", {
+    method: "POST",
+    credentials: "include",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Logout failed");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.status === "success") {
+        currentUser = null;
+        localStorage.removeItem("nyayabotUser");
+        sessionStorage.clear();
+        updateNavbar();
+        alert("Logged out successfully!");
+      } else {
+        alert(data.message || "Logout failed");
+      }
+    })
+    .catch((error) => {
+      console.error("Logout error:", error);
+      alert("Logout failed: " + error.message);
+    });
 }
 
 // Language change functionality
@@ -308,35 +468,50 @@ function changeLanguage() {
 function updatePageText() {
   const t = translations[currentLanguage];
 
-  document.getElementById("mainTitle").textContent = t.mainTitle;
-  document.getElementById("mainSubtitle").textContent = t.mainSubtitle;
-  document.getElementById("firTitle").textContent = t.firTitle;
-  document.getElementById("firDescription").textContent = t.firDescription;
-  document.getElementById("downloadBtnText").textContent = t.downloadBtnText;
-  document.getElementById("tipsTitle").textContent = t.tipsTitle;
-  document.getElementById("grievanceTitle").textContent = t.grievanceTitle;
-  document.getElementById("grievanceDescription").textContent =
-    t.grievanceDescription;
-  document.getElementById("submitBtnText").textContent = t.submitBtnText;
-  document.getElementById("guideTitle").textContent = t.guideTitle;
+  const setTextContent = (id, content) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = content;
+  };
+
+  setTextContent("mainTitle", t.mainTitle);
+  setTextContent("mainSubtitle", t.mainSubtitle);
+  setTextContent("firTitle", t.firTitle);
+  setTextContent("firDescription", t.firDescription);
+  setTextContent("downloadBtnText", t.downloadBtnText);
+  setTextContent("tipsTitle", t.tipsTitle);
+  setTextContent("grievanceTitle", t.grievanceTitle);
+  setTextContent("grievanceDescription", t.grievanceDescription);
+  setTextContent("submitBtnText", t.submitBtnText);
+  setTextContent("guideTitle", t.guideTitle);
 
   const tipsList = document.getElementById("tipsList");
-  tipsList.innerHTML = "";
-  t.tipsList.forEach((tip) => {
-    const li = document.createElement("li");
-    li.textContent = tip;
-    tipsList.appendChild(li);
-  });
+  if (tipsList) {
+    tipsList.innerHTML = "";
+    t.tipsList.forEach((tip) => {
+      const li = document.createElement("li");
+      li.textContent = tip;
+      tipsList.appendChild(li);
+    });
+  }
 
   if (document.getElementById("loginModal")?.classList.contains("show")) {
-    const currentForm =
-      document.getElementById("modalTitle").textContent === t.loginTitle
-        ? "login"
-        : "signup";
+    const currentForm = document
+      .getElementById("modalTitle")
+      .textContent.includes(t.loginTitle)
+      ? "login"
+      : "signup";
     closeLoginModal();
     openLoginModal(currentForm);
   }
 }
+
+// Initialize the page
+document.addEventListener("DOMContentLoaded", function () {
+  loadUserData().then(() => {
+    updatePageText();
+    // No need to add event listener since onclick is handled in HTML
+  });
+});
 
 // Download FIR Template as PDF
 function downloadFIRTemplate() {
@@ -472,91 +647,132 @@ function showGuidance(grievanceType) {
   const guideSection = document.getElementById("guideSection");
   const guideSteps = document.getElementById("guideSteps");
 
-  const guides = {
-    theft: [
-      "Immediately file an FIR at the nearest police station",
-      "Prepare a detailed list of stolen items with approximate values",
-      "Gather any evidence like CCTV footage or witness statements",
-      "Get a copy of the FIR for your records",
-      "Follow up with the investigating officer regularly",
-      "Contact your insurance company if applicable",
-    ],
-    fraud: [
-      "Collect all documents related to the fraud",
-      "File an FIR at the police station",
-      "Report to the bank/financial institution if money is involved",
-      "File a complaint with the cyber crime cell if it's online fraud",
-      "Consult a lawyer for legal advice",
-      "Keep records of all communications",
-    ],
-    assault: [
-      "Seek immediate medical attention",
-      "Get a medical certificate from a government hospital",
-      "File an FIR immediately",
-      "Take photographs of injuries",
-      "Collect witness statements",
-      "Consult a lawyer for further legal action",
-    ],
-    harassment: [
-      "Document all instances of harassment",
-      "Save evidence like messages, emails, or recordings",
-      "File an FIR under relevant sections",
-      "Approach the women's helpline if applicable",
-      "Consider filing for a restraining order",
-      "Seek support from family and friends",
-    ],
-    cyber: [
-      "Do not delete any evidence",
-      "Take screenshots of the cybercrime",
-      "File a complaint at cybercrime.gov.in",
-      "Report to your local cyber crime cell",
-      "Change all your passwords",
-      "Monitor your bank accounts and credit reports",
-    ],
-    domestic: [
-      "Contact the National Domestic Violence Helpline: 181",
-      "Document all incidents with dates and details",
-      "Seek medical attention for injuries",
-      "File an FIR or complaint",
-      "Apply for a protection order under the Domestic Violence Act",
-      "Reach out to local support groups and NGOs",
-    ],
-    property: [
-      "Gather all property-related documents",
-      "Consult a property lawyer",
-      "Try mediation before going to court",
-      "File a civil suit if necessary",
-      "Get a title verification done",
-      "Consider approaching the local authorities",
-    ],
-    other: [
-      "Document your issue in detail",
-      "Research the relevant laws",
-      "Consult with a lawyer",
-      "File appropriate complaints with relevant authorities",
-      "Gather evidence and witness statements",
-      "Follow up regularly on your case",
-    ],
-  };
+  // Normalize the issue type to lowercase
+  const normalizedType = grievanceType.toLowerCase().trim();
 
-  const steps = guides[grievanceType] || guides.other;
-
-  guideSteps.innerHTML = "";
-  steps.forEach((step) => {
-    const li = document.createElement("li");
-    li.textContent = step;
-    guideSteps.appendChild(li); // Fixed: Changed from tipsList to guideSteps
-  });
-
+  // Show loading state
+  guideSteps.innerHTML = '<li class="loading">Loading guidance...</li>';
   guideSection.style.display = "block";
   guideSection.scrollIntoView({ behavior: "smooth" });
+
+  // Fetch guidance from the API using normalized type
+  fetch(
+    `/nyayabot/api/guidance.php?issue_type=${encodeURIComponent(
+      normalizedType
+    )}`
+  )
+    .then((response) => {
+      if (!response.ok) {
+        return response.text().then((text) => {
+          throw new Error(
+            `HTTP error! Status: ${response.status}, Response: ${text.substring(
+              0,
+              100
+            )}...`
+          );
+        });
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.error || !data.steps || data.steps.length === 0) {
+        throw new Error(data.error || "No guidance available");
+      }
+      const steps = data.steps.map((step) => step.step_description);
+
+      guideSteps.innerHTML = "";
+      steps.forEach((step) => {
+        const li = document.createElement("li");
+        li.textContent = step;
+        guideSteps.appendChild(li);
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching guidance:", error);
+      // Fallback to static data if API fails
+      const fallbackGuides = {
+        theft: [
+          "Ensure your immediate safety and seek medical attention if you or anyone else is injured during the incident.",
+          "Immediately file an FIR at the nearest police station by calling 100 or 112, or visit in person.",
+          "Prepare a detailed list of stolen items with approximate values and provide details for the FIR.",
+          "Gather any evidence like CCTV footage, witness statements, or photographs, and preserve the crime scene if possible.",
+          "Follow up with the investigating officer regularly and contact your insurance company if applicable.",
+          "Consider consulting a lawyer for further legal recourse or compensation.",
+        ],
+        fraud: [
+          "Collect all documents related to the fraud, including communications, transaction records, and witness details.",
+          "If money is involved, immediately inform your bank or financial institution to freeze accounts or reverse transactions.",
+          "File an FIR at the police station under relevant sections like IPC 420 for cheating.",
+          "If it’s online fraud, file a complaint with the National Cyber Crime Reporting Portal at cybercrime.gov.in.",
+          "Consult a lawyer for legal advice on recovery of losses and keep records of all communications.",
+        ],
+        assault: [
+          "Seek immediate medical attention and obtain a medico-legal certificate from a government hospital.",
+          "File an FIR immediately by reporting to the nearest police station or calling 100/112.",
+          "Take photographs of injuries and preserve evidence such as clothing or witness statements.",
+          "If applicable, undergo a medical examination as per legal requirements for assault cases.",
+          "Consult a lawyer for further legal action and seek support from victim assistance services.",
+        ],
+        harassment: [
+          "Document all instances of harassment with dates, times, descriptions, and save evidence like messages or recordings.",
+          "If it’s workplace harassment, report to the Internal Complaints Committee (ICC) as per the POSH Act.",
+          "File an FIR under relevant laws like IPC 354 for criminal force to outrage modesty.",
+          "Seek help from helplines such as 1091 for women or other support services.",
+          "Consider filing for a restraining order and consult a lawyer for legal remedies.",
+          "Seek support from family and friends for emotional backing.",
+        ],
+        cyber: [
+          "Do not delete any evidence; take screenshots of the cybercrime and act quickly.",
+          "File a complaint at cybercrime.gov.in and report to your local cyber crime cell.",
+          "Call the national helpline 1930 for immediate assistance.",
+          "Provide all details including evidence like URLs and transaction IDs.",
+          "Change all your passwords and monitor your bank accounts and credit reports.",
+          "Visit a local cyber cell if needed and follow up on the complaint status.",
+        ],
+        domestic: [
+          "Ensure your immediate safety: Leave the situation if possible and seek shelter with trusted friends, family, or a shelter home.",
+          "Contact the National Domestic Violence Helpline: 181 or 1091 for immediate help.",
+          "Document all incidents with dates, details, and seek medical attention for injuries.",
+          "File an FIR or complaint under the Protection of Women from Domestic Violence Act (PWDVA).",
+          "Apply for a protection order at the nearest police station or magistrate.",
+          "Reach out to local support groups and NGOs for counseling and legal aid.",
+        ],
+        property: [
+          "Gather all property-related documents, including title deeds, sale agreements, and inheritance proofs.",
+          "Consult a property lawyer to understand your rights and options.",
+          "Try mediation before going to court and send a legal notice to the other party.",
+          "File a civil suit if necessary and get a title verification done.",
+          "Consider approaching local authorities or alternative dispute resolution if unresolved.",
+        ],
+        other: [
+          "Document your issue in detail, including all relevant details and evidence.",
+          "Research the relevant laws or identify the appropriate authority (e.g., police, consumer court).",
+          "Consult with a lawyer or legal aid service for personalized guidance.",
+          "File appropriate complaints with relevant authorities and gather witness statements.",
+          "Follow up regularly on your case for progress updates.",
+        ],
+      };
+
+      // Use normalizedType for fallback lookup
+      const fallbackSteps =
+        fallbackGuides[normalizedType] || fallbackGuides.other;
+
+      guideSteps.innerHTML = "";
+      fallbackSteps.forEach((step) => {
+        const li = document.createElement("li");
+        li.textContent = step;
+        guideSteps.appendChild(li);
+      });
+
+      guideSteps.insertAdjacentHTML(
+        "afterend",
+        '<p class="error-note">Note: Guidance loaded from fallback data due to an error. Details: ' +
+          error.message +
+          "</p>"
+      );
+    });
 }
 
-// Initialize the page
-document.addEventListener("DOMContentLoaded", function () {
-  loadUserData();
-  updatePageText();
-});
 
 function initiateCall(number) {
   // Check if on mobile device
