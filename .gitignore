@@ -15,6 +15,7 @@ test.html
 test.php
 test_db.php
 test_openai.php
+test_log.php
 
 # MySQL-related
 *.sql # SQL dumps or database backups
