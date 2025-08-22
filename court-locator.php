@@ -79,7 +79,7 @@ $default_map = !empty($courts) ? $courts[0]['iframe_src'] : 'https://www.google.
                 <option value="" <?php echo $court_type == '' ? 'selected' : ''; ?>>All Courts</option>
                 <option value="district" <?php echo $court_type == 'district' ? 'selected' : ''; ?>>District Courts</option>
                 <option value="high" <?php echo $court_type == 'high' ? 'selected' : ''; ?>>High Courts</option>
-                <option value="supreme" <?php echo $court_type == 'supreme' ? 'selected' : ''; ?>>Supreme Court</option>
+                
             </select>
             <input type="text" id="locationSearch" placeholder="Search city (e.g., Mumbai, Delhi)" value="<?php echo htmlspecialchars($city); ?>" class="p-2 border rounded-md w-full sm:w-64">
             <button onclick="filterCourts()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-2 sm:mt-0">Search</button>
