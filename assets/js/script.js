@@ -76,36 +76,6 @@ let currentUser = null;
 let currentLanguage = "en";
 
 // Validate session with the server
-// function validateSession() {
-//   return fetch("/nyayabot/api/auth/login.php", {
-//     method: "GET",
-//     credentials: "include",
-//   })
-//     .then((response) => {
-//       if (!response.ok) {
-//         throw new Error("Session validation failed");
-//       }
-//       return response.json();
-//     })
-//     .then((data) => {
-//       if (data.status === "success" && data.user) {
-//         currentUser = { email: data.user.email, user_id: data.user.user_id };
-//         localStorage.setItem("nyayabotUser", JSON.stringify(currentUser));
-//         return true;
-//       } else {
-//         throw new Error("Invalid session");
-//       }
-//     })
-//     .catch((error) => {
-//       console.error("Session validation error:", error);
-//       currentUser = null;
-//       localStorage.removeItem("nyayabotUser");
-//       sessionStorage.clear();
-//       return false;
-//     });
-// }
-
-// Validate session with the server
 function validateSession() {
   return fetch("/nyayabot/api/auth/login.php", {
     method: "GET",
@@ -314,64 +284,6 @@ function modalLogin() {
     alert("Please enter both email and password");
   }
 }
-
-// Modal signup function
-// function modalSignup() {
-//   const email = document.getElementById("modalEmail").value;
-//   const password = document.getElementById("modalPassword").value;
-//   const confirmPassword = document.getElementById("modalConfirmPassword").value;
-//   const name = document.getElementById("modalFullName").value;
-//   const phone = document.getElementById("modalPhone").value;
-
-//   if (email && password && confirmPassword && name && phone) {
-//     if (password !== confirmPassword) {
-//       alert("Passwords do not match. Please try again.");
-//       return;
-//     }
-//     console.log("Sending signup request:", { email, name, phone });
-//     fetch("/nyayabot/api/auth/register.php", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         email: email,
-//         password: password,
-//         name: name,
-//         phone: phone,
-//       }),
-//       credentials: "include",
-//     })
-//       .then((response) => {
-//         console.log("Signup response status:", response.status);
-//         if (!response.ok) {
-//           return response.json().then((err) => {
-//             throw new Error(
-//               err.message || `HTTP error! Status: ${response.status}`
-//             );
-//           });
-//         }
-//         return response.json();
-//       })
-//       .then((data) => {
-//         console.log("Signup response data:", data);
-//         if (data.message === "User registered successfully") {
-//           currentUser = { email: email, name: name, user_id: data.user_id };
-//           localStorage.setItem("nyayabotUser", JSON.stringify(currentUser));
-//           updateNavbar();
-//           closeLoginModal();
-//           alert("Account created successfully!");
-//           alert(data.message || "Registration failed");
-//         }
-//       })
-//       .catch((error) => {
-//         console.error("Signup error:", error);
-//         alert(error.message || "Error registering. Please try again.");
-//       });
-//   } else {
-//     alert("Please fill all fields");
-//   }
-// }
 
 function modalSignup() {
   const email = document.getElementById("modalEmail").value;
